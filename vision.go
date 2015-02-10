@@ -16,9 +16,14 @@ import (
 //	"reflect"
 )
 
+type Size struct {
+	Width  int
+	Height int
+}
+
 type GrayImage struct {
-	Width, Height int
-	Pixels        []byte
+	Size
+	Pixels []byte
 }
 
 func (m *GrayImage) String() string {
@@ -44,7 +49,7 @@ func ImageFromFile(fn string) (image.Image, error) {
 	return img, nil
 }
 
-func (m *GrayImage) SetImage(img image.Image) error {
+func (m *GrayImage) SetImage(img image.Image) {
 	bounds := img.Bounds()
 	w, h := bounds.Dx(), bounds.Dy()
 	m.Width, m.Height = w, h
@@ -124,8 +129,6 @@ func (m *GrayImage) SetImage(img image.Image) error {
 			}
 		}
 	}
-
-	return nil
 }
 
 func (m *GrayImage) AsImage() image.Image {
@@ -155,8 +158,8 @@ func SaveImageAsPng(m image.Image, fn string) error {
 }
 
 type GrayIntImage struct {
-	Width, Height int
-	Pixels        []int
+	Size
+	Pixels []int
 }
 
 type RGBImage [3]GrayImage

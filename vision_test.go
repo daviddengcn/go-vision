@@ -26,10 +26,7 @@ func TestLoad(t *testing.T) {
 		t.Logf("Image loaded: %v", d.fn)
 		
 		var m GrayImage
-		if err := m.SetImage(img); err != nil {
-			t.Error(err)
-			continue
-		}
+		m.SetImage(img)
 
 		if m.Width != d.width || m.Height != d.height {
 			t.Errorf("(GrayImage) Wrong size: %d, %d, expected %d, %d",
@@ -41,7 +38,7 @@ func TestLoad(t *testing.T) {
 				img.Bounds().Dx, img.Bounds().Dy, d.width, d.height)
 		}
 		
-		if err := SaveImageAsPng(img, d.fn + ".png"); err != nil {
+		if err := SaveImageAsPng(img, "testout/" + d.fn + ".png"); err != nil {
 			t.Error(err)
 			continue
 		}
