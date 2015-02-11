@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	//	"fmt"
+	"github.com/daviddengcn/go-assert"
 )
 
 func TestLoad(t *testing.T) {
@@ -64,4 +64,20 @@ func TestLoad(t *testing.T) {
 			continue
 		}
 	}
+}
+
+func TestGrayImage_Resize(t *testing.T) {
+	var m GrayImage
+	m.Resize(Size{123, 456})
+	assert.Equals(t, "Width", m.Width, 123)
+	assert.Equals(t, "Height", m.Height, 456)
+	assert.Equals(t, "len(Pixels)", len(m.Pixels), 123*456)
+}
+
+func TestRGBImage_Resize(t *testing.T) {
+	var m RGBImage
+	m.Resize(Size{123, 456})
+	assert.Equals(t, "Width", m.Width, 123)
+	assert.Equals(t, "Height", m.Height, 456)
+	assert.Equals(t, "len(Pixels)", len(m.Pixels), 123*456)
 }

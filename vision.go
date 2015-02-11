@@ -25,15 +25,6 @@ func (sz Size) Area() int {
 	return sz.Width * sz.Height
 }
 
-type GrayImage struct {
-	Size
-	Pixels []byte
-}
-
-func (m *GrayImage) String() string {
-	return fmt.Sprintf("[gray-image]%dx%d", m.Width, m.Height)
-}
-
 func ImageFromFile(fn string) (image.Image, error) {
 	// Open the file.
 	file, err := os.Open(fn)
@@ -53,16 +44,32 @@ func ImageFromFile(fn string) (image.Image, error) {
 	return img, nil
 }
 
+type GrayImage struct {
+	Size
+	Pixels []byte
+}
+
+func (m *GrayImage) String() string {
+	return fmt.Sprintf("[gray-image]%dx%d", m.Width, m.Height)
+}
+
+/*
+Resize sets the size of the GrayImage to a specific value. Pixels is also updated accordingly.
+*/
+func (m *GrayImage) Resize(sz Size) {
+	m.Size = sz
+	l := sz.Area()
+	if cap(m.Pixels) >= l {
+		m.Pixels = m.Pixels[:l]
+	} else {
+		m.Pixels = make([]byte, l)
+	}
+}
+
 func (m *GrayImage) SetImage(img image.Image) {
 	bounds := img.Bounds()
 	w, h := bounds.Dx(), bounds.Dy()
-	m.Width, m.Height = w, h
-	l := m.Area()
-	if len(m.Pixels) < l {
-		m.Pixels = make([]byte, l)
-	} else if len(m.Pixels) > l {
-		m.Pixels = m.Pixels[:l]
-	}
+	m.Resize(Size{w, h})
 
 	switch img := img.(type) {
 	case *image.Gray:
@@ -168,6 +175,19 @@ type RGBInt [3]int
 type RGBImage struct {
 	Size
 	Pixels []RGB
+}
+
+/*
+Resize sets the size of the RGBImage to a specific value. Pixels is also updated accordingly.
+*/
+func (m *RGBImage) Resize(sz Size) {
+	m.Size = sz
+	l := sz.Area()
+	if cap(m.Pixels) >= l {
+		m.Pixels = m.Pixels[:l]
+	} else {
+		m.Pixels = make([]RGB, l)
+	}
 }
 
 func (m *RGBImage) SetImage(img image.Image) {
