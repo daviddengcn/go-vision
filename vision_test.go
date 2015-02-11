@@ -1,9 +1,10 @@
 package vision
 
 import (
+	"os"
 	"testing"
 
-//	"fmt"
+	//	"fmt"
 )
 
 func TestLoad(t *testing.T) {
@@ -17,6 +18,8 @@ func TestLoad(t *testing.T) {
 		{16, 16, "nrgba-16x16.png"},
 	}
 
+	os.MkdirAll("testout", 0755)
+
 	for _, d := range datasets {
 		img, err := ImageFromFile("testdata/" + d.fn)
 		if err != nil {
@@ -24,7 +27,7 @@ func TestLoad(t *testing.T) {
 			continue
 		}
 		t.Logf("Image loaded: %v", d.fn)
-		
+
 		var m GrayImage
 		m.SetImage(img)
 
@@ -32,13 +35,31 @@ func TestLoad(t *testing.T) {
 			t.Errorf("(GrayImage) Wrong size: %d, %d, expected %d, %d",
 				m.Width, m.Height, d.width, d.height)
 		}
-		img = m.AsImage()
-		if img.Bounds().Dx() != d.width || img.Bounds().Dy() != d.height {
-			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d", 
-				img.Bounds().Dx, img.Bounds().Dy, d.width, d.height)
+		outImg := m.AsImage()
+		if outImg.Bounds().Dx() != d.width || outImg.Bounds().Dy() != d.height {
+			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d",
+				outImg.Bounds().Dx, outImg.Bounds().Dy, d.width, d.height)
+		}
+
+		if err := SaveImageAsPng(outImg, "testout/gray-"+d.fn+".png"); err != nil {
+			t.Error(err)
+			continue
 		}
 		
-		if err := SaveImageAsPng(img, "testout/" + d.fn + ".png"); err != nil {
+		var rgbImg RGBImage
+		rgbImg.SetImage(img)
+		if rgbImg.Width != d.width || rgbImg.Height != d.height {
+			t.Errorf("(RGBImage) Wrong size: %d, %d, expected %d, %d",
+				rgbImg.Width, rgbImg.Height, d.width, d.height)
+		}
+		
+		outImg = rgbImg.AsImage()
+		if outImg.Bounds().Dx() != d.width || outImg.Bounds().Dy() != d.height {
+			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d",
+				outImg.Bounds().Dx, outImg.Bounds().Dy, d.width, d.height)
+		}
+
+		if err := SaveImageAsPng(outImg, "testout/rgb-"+d.fn+".png"); err != nil {
 			t.Error(err)
 			continue
 		}
