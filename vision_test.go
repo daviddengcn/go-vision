@@ -45,14 +45,14 @@ func TestLoad(t *testing.T) {
 			t.Error(err)
 			continue
 		}
-		
+
 		var rgbImg RGBImage
 		rgbImg.SetImage(img)
 		if rgbImg.Width != d.width || rgbImg.Height != d.height {
 			t.Errorf("(RGBImage) Wrong size: %d, %d, expected %d, %d",
 				rgbImg.Width, rgbImg.Height, d.width, d.height)
 		}
-		
+
 		outImg = rgbImg.AsImage()
 		if outImg.Bounds().Dx() != d.width || outImg.Bounds().Dy() != d.height {
 			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d",
