@@ -66,18 +66,36 @@ func TestLoad(t *testing.T) {
 	}
 }
 
-func TestGrayImage_Resize(t *testing.T) {
-	var m GrayImage
-	m.Resize(Size{123, 456})
-	assert.Equals(t, "Width", m.Width, 123)
-	assert.Equals(t, "Height", m.Height, 456)
-	assert.Equals(t, "len(Pixels)", len(m.Pixels), 123*456)
+func TestResize(t *testing.T) {
+	var gray GrayImage
+	gray.Resize(Size{123, 456})
+	assert.Equals(t, "Size", gray.Size, Size{123, 456})
+	assert.Equals(t, "len(Pixels)", len(gray.Pixels), 123*456)
+
+	var ig IntGrayImage
+	ig.Resize(Size{123, 555})
+	assert.Equals(t, "Size", ig.Size, Size{123, 555})
+	assert.Equals(t, "len(Pixels)", len(ig.Pixels), 123*555)
+
+	var rgb RGBImage
+	rgb.Resize(Size{123, 456})
+	assert.Equals(t, "Size", rgb.Size, Size{123, 456})
+	assert.Equals(t, "len(Pixels)", len(rgb.Pixels), 123*456)
 }
 
-func TestRGBImage_Resize(t *testing.T) {
-	var m RGBImage
-	m.Resize(Size{123, 456})
-	assert.Equals(t, "Width", m.Width, 123)
-	assert.Equals(t, "Height", m.Height, 456)
-	assert.Equals(t, "len(Pixels)", len(m.Pixels), 123*456)
+func TestFill(t *testing.T) {
+	var gray GrayImage
+	gray.Resize(Size{456, 123})
+	gray.Fill(123)
+	assert.Equals(t, "[0,0]", gray.Pixels[0], byte(123))
+	
+	var ig IntGrayImage
+	ig.Resize(Size{555, 123})
+	ig.Fill(12345)
+	assert.Equals(t, "[0,0]", ig.Pixels[0], int(12345))
+	
+	var rgb RGBImage
+	rgb.Resize(Size{456, 123})
+	rgb.Fill(RGB{1, 2, 3})
+	assert.Equals(t, "[0,0]", rgb.Pixels[0], RGB{1, 2, 3})
 }

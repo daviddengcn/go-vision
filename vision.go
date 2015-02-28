@@ -68,8 +68,20 @@ Fills assigns all pixels of the image by a value.
 func (m GrayImage) Fill(vl byte) {
 	l := m.Area()
 	for i := 0; i < l; i++ {
-		m.Pixels[l] = vl
+		m.Pixels[i] = vl
 	}
+}
+
+/*
+LoadFromFile sets the contents of the image from an image file.
+*/
+func (m *GrayImage) LoadFromFile(fn string) error {
+	img, err := ImageFromFile(fn)
+	if err != nil {
+		return err
+	}
+	m.SetImage(img)
+	return nil
 }
 
 /*
@@ -176,6 +188,37 @@ func SaveImageAsPng(m image.Image, fn string) error {
 	return png.Encode(f, m)
 }
 
+/*
+IntGrayImage represents a gray image with each element an int.
+*/
+type IntGrayImage struct {
+	Size
+	Pixels []int
+}
+
+/*
+Resize sets the size of the image to a specific value. Pixels is also updated accordingly.
+*/
+func (m *IntGrayImage) Resize(sz Size) {
+	m.Size = sz
+	l := sz.Area()
+	if cap(m.Pixels) >= l {
+		m.Pixels = m.Pixels[:l]
+	} else {
+		m.Pixels = make([]int, l)
+	}
+}
+
+/*
+Fills assigns all pixels of the image by a value.
+*/
+func (m IntGrayImage) Fill(vl int) {
+	l := m.Area()
+	for i := 0; i < l; i++ {
+		m.Pixels[i] = vl
+	}
+}
+
 type RGB [3]byte
 
 type RGBImage struct {
@@ -202,8 +245,20 @@ Fills assigns all pixels of the image by a value.
 func (m RGBImage) Fill(vl RGB) {
 	l := m.Area()
 	for i := 0; i < l; i++ {
-		m.Pixels[l] = vl
+		m.Pixels[i] = vl
 	}
+}
+
+/*
+LoadFromFile sets the contents of the image from an image file.
+*/
+func (m *RGBImage) LoadFromFile(fn string) error {
+	img, err := ImageFromFile(fn)
+	if err != nil {
+		return err
+	}
+	m.SetImage(img)
+	return nil
 }
 
 /*
@@ -301,3 +356,5 @@ func (m RGBImage) AsImage() image.Image {
 	}
 	return rgb
 }
+
+type IntRGB [3]int
