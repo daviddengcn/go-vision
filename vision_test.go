@@ -38,7 +38,7 @@ func TestLoad(t *testing.T) {
 		outImg := m.AsImage()
 		if outImg.Bounds().Dx() != d.width || outImg.Bounds().Dy() != d.height {
 			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d",
-				outImg.Bounds().Dx, outImg.Bounds().Dy, d.width, d.height)
+				outImg.Bounds().Dx(), outImg.Bounds().Dy(), d.width, d.height)
 		}
 
 		if err := SaveImageAsPng(outImg, "testout/gray-"+d.fn+".png"); err != nil {
@@ -56,7 +56,7 @@ func TestLoad(t *testing.T) {
 		outImg = rgbImg.AsImage()
 		if outImg.Bounds().Dx() != d.width || outImg.Bounds().Dy() != d.height {
 			t.Errorf("(AsImage) Wrong size: %d, %d, expected %d, %d",
-				outImg.Bounds().Dx, outImg.Bounds().Dy, d.width, d.height)
+				outImg.Bounds().Dx(), outImg.Bounds().Dy(), d.width, d.height)
 		}
 
 		if err := SaveImageAsPng(outImg, "testout/rgb-"+d.fn+".png"); err != nil {
@@ -88,12 +88,12 @@ func TestFill(t *testing.T) {
 	gray.Resize(Size{456, 123})
 	gray.Fill(123)
 	assert.Equals(t, "[0,0]", gray.Pixels[0], byte(123))
-	
+
 	var ig IntGrayImage
 	ig.Resize(Size{555, 123})
 	ig.Fill(12345)
 	assert.Equals(t, "[0,0]", ig.Pixels[0], int(12345))
-	
+
 	var rgb RGBImage
 	rgb.Resize(Size{456, 123})
 	rgb.Fill(RGB{1, 2, 3})
